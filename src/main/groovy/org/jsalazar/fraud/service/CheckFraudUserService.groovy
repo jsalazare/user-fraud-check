@@ -15,4 +15,5 @@ interface CheckFraudUserService {
 
     boolean validateUserPaymentMethods (Long userId)
 
+    boolean validateReportsFraudulentUser(Long userId)
 }

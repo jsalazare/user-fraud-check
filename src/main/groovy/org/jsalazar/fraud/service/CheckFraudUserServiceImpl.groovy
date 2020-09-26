@@ -3,6 +3,7 @@ package org.jsalazar.fraud.service
 import org.jsalazar.fraud.client.BankValidationService
 import org.jsalazar.fraud.client.LocationServiceClient
 import org.jsalazar.fraud.client.UserServiceClient
+import org.jsalazar.fraud.configuration.CheckFraudUserServiceConfiguration
 import org.jsalazar.fraud.exception.UserNotFoundException
 import org.jsalazar.fraud.model.User
 
@@ -13,6 +14,8 @@ class CheckFraudUserServiceImpl implements CheckFraudUserService{
     LocationServiceClient locationServiceClient
 
     BankValidationService bankValidationService
+
+    CheckFraudUserServiceConfiguration CheckFraudUserServiceConfiguration
 
     @Override
     User getUserById(Long userId) {
@@ -48,5 +51,24 @@ class CheckFraudUserServiceImpl implements CheckFraudUserService{
     boolean validateUserPaymentMethods (Long userId){
         User user = getUserById(userId)
         bankValidationService.validatePaymentMethod(user.paymentMethods)
+    }
+
+    @Override
+    boolean validateReportsFraudulentUser(Long userId) {
+        if(isFraudulentUser(userId)){
+            return true
+        }
+
+        int sum = 0
+        checkFraudUserServiceConfiguration.fraudReportsTypes.each {
+            sum += userServiceClient.getUserReportByType(userId, it).size()
+        }
+
+        if (sum >= checkFraudUserServiceConfiguration.reportsLimit){
+            setFraudulentUser(userId, true)
+            return true
+        }
+
+        false
     }
 }
