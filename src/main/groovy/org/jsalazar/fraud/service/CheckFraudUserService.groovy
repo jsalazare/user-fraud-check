@@ -1,0 +1,18 @@
+package org.jsalazar.fraud.service
+
+import org.jsalazar.fraud.model.User
+
+interface CheckFraudUserService {
+
+
+    User getUserById(Long userId)
+
+    void setFraudulentUser(Long userId, boolean isFraud)
+
+    boolean isFraudulentUser(Long userId)
+
+    boolean validateUserLocation (Long userId, String ip)
+
+    boolean validateUserPaymentMethods (Long userId)
+
+}
