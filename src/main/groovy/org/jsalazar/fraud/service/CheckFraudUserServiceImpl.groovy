@@ -15,7 +15,7 @@ class CheckFraudUserServiceImpl implements CheckFraudUserService{
 
     BankValidationService bankValidationService
 
-    CheckFraudUserServiceConfiguration CheckFraudUserServiceConfiguration
+    CheckFraudUserServiceConfiguration checkFraudUserServiceConfiguration
 
     @Override
     User getUserById(Long userId) {

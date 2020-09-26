@@ -1,5 +1,5 @@
 package org.jsalazar.fraud.model
 
 enum ReportType {
-    FRAUD
+    FRAUD, FAKE
 }
