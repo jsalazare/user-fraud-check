@@ -12,7 +12,7 @@ Features of this module:
 
 ## Installation
 
-Download the jar file in libs/user-fraud-check.jar
+Download the jar file in [libs/user-fraud-check.jar](https://github.com/jsalazare/user-fraud-check/raw/master/libs/user-fraud-check.jar)  
 
 Add dependency to project:
 ```
