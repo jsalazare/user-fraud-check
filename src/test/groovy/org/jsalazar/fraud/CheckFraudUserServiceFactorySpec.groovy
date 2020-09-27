@@ -4,7 +4,7 @@ import org.jsalazar.fraud.client.BankValidationService
 import org.jsalazar.fraud.client.LocationServiceClient
 import org.jsalazar.fraud.client.UserServiceClient
 import org.jsalazar.fraud.configuration.CheckFraudUserServiceConfiguration
-import org.jsalazar.fraud.service.CheckFraudUserServiceFactory
+import org.jsalazar.fraud.service.FraudValidationServiceFactory
 import org.jsalazar.fraud.service.CheckFraudUserServiceImpl
 import spock.lang.Shared
 import spock.lang.Specification
@@ -30,7 +30,7 @@ class CheckFraudUserServiceFactorySpec extends Specification{
 
     def "Test create CheckFraudUserServiceImpl with factory method"() {
         when: "calling factory method"
-        CheckFraudUserServiceImpl checkFraudUserServiceImpl = CheckFraudUserServiceFactory.getCheckFraudUserService(mockUserServiceClient, mockLocationServiceClient, mockBankValidationService, checkFraudUserServiceConfiguration)
+        CheckFraudUserServiceImpl checkFraudUserServiceImpl = FraudValidationServiceFactory.getCheckFraudUserService(mockUserServiceClient, mockLocationServiceClient, mockBankValidationService, checkFraudUserServiceConfiguration)
 
         then: "returned checkFraudUserServiceImpl should be created with methods param"
         checkFraudUserServiceImpl.userServiceClient == mockUserServiceClient
@@ -42,7 +42,7 @@ class CheckFraudUserServiceFactorySpec extends Specification{
 
     def "Test create CheckFraudUserServiceImpl with factory method default"() {
         when: "calling factory method"
-        CheckFraudUserServiceImpl checkFraudUserServiceImpl = CheckFraudUserServiceFactory.getDefaultCheckFraudUserService(checkFraudUserServiceConfiguration)
+        CheckFraudUserServiceImpl checkFraudUserServiceImpl = FraudValidationServiceFactory.getDefaultCheckFraudUserService(checkFraudUserServiceConfiguration)
 
         then: "returned checkFraudUserServiceImpl should be created with methods param"
         checkFraudUserServiceImpl.userServiceClient

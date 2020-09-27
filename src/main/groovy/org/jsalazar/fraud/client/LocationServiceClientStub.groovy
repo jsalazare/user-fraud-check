@@ -6,7 +6,7 @@ class LocationServiceClientStub implements LocationServiceClient{
 
 
     @Override
-    boolean validateAddressMatchesIP(String ip, Address address) {
+    boolean validateAddressMatchesIP(Address address, String ip) {
         true
     }
 }

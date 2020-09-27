@@ -8,7 +8,7 @@ import org.jsalazar.fraud.client.UserServiceClient
 import org.jsalazar.fraud.client.UserServiceClientStub
 import org.jsalazar.fraud.configuration.CheckFraudUserServiceConfiguration
 
-class CheckFraudUserServiceFactory {
+class FraudValidationServiceFactory {
 
     static CheckFraudUserService getCheckFraudUserService (UserServiceClient userServiceClient, LocationServiceClient locationServiceClient, BankValidationService bankValidationService, CheckFraudUserServiceConfiguration checkFraudUserServiceConfiguration){
         new CheckFraudUserServiceImpl(userServiceClient: userServiceClient, locationServiceClient: locationServiceClient, bankValidationService: bankValidationService, checkFraudUserServiceConfiguration: checkFraudUserServiceConfiguration)
@@ -19,5 +19,13 @@ class CheckFraudUserServiceFactory {
                 locationServiceClient: new LocationServiceClientStub(),
                 bankValidationService: new BankValidationServiceStub(),
                 checkFraudUserServiceConfiguration: checkFraudUserServiceConfiguration)
+    }
+
+    static ValidationServiceImpl getValidatorService (LocationServiceClientStub locationServiceClientStub, BankValidationServiceStub bankValidationServiceStub){
+        new ValidationServiceImpl(locationServiceClient: locationServiceClientStub, bankValidationService: bankValidationServiceStub)
+    }
+
+    static ValidationServiceImpl getDefaultValidatorService (){
+        new ValidationServiceImpl(locationServiceClient: new LocationServiceClientStub(), bankValidationService: new BankValidationServiceStub())
     }
 }
