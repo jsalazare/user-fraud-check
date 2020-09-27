@@ -40,7 +40,7 @@ class CheckFraudUserServiceFactorySpec extends Specification{
 
     def "Test create CheckFraudUserServiceImpl with factory method default"() {
         when: "calling factory method"
-        CheckFraudUserServiceImpl checkFraudUserServiceImpl = FraudValidationServiceFactory.getDefaultCheckFraudUserService(checkFraudUserServiceConfiguration) as int
+        CheckFraudUserServiceImpl checkFraudUserServiceImpl = FraudValidationServiceFactory.getDefaultCheckFraudUserService(checkFraudUserServiceConfiguration)
 
         then: "returned checkFraudUserServiceImpl should be created with methods param"
         checkFraudUserServiceImpl.userServiceClient
