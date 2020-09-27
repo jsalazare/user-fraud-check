@@ -10,6 +10,7 @@ import org.jsalazar.fraud.model.PaymentMethod
 import org.jsalazar.fraud.model.ReportType
 import org.jsalazar.fraud.model.User
 import org.jsalazar.fraud.model.UserReport
+import org.jsalazar.fraud.rules.CustomRule
 import org.jsalazar.fraud.service.CheckFraudUserServiceImpl
 import spock.lang.Shared
 import spock.lang.Specification
@@ -190,6 +191,38 @@ class CheckFraudUserServiceImplSpec extends Specification{
     }
 
 
+    def "Test validate fraudulent user custom rules phone validation add to black list true"() {
+
+        given: "a expected user and a custom rule"
+        User expectedUser = buildUser()
+        expectedUser.phone = "111-111-1111"
+        CustomRule<User> customRule = {user -> user.phone ==~ /(\d{3})-(\d{3})-(\d{4})/}
+
+        when: "validate fraud user with custom rules"
+        boolean  actualResult = checkFraudUserService.validateFraudulentUserCustomRule(expectedUser.id, customRule, true)
+
+        then: "validation should pass and expected calls"
+        2 * mockUserServiceClient.getUserById(expectedUser.id) >> expectedUser
+        1 * mockUserServiceClient.saveUser(expectedUser)
+        actualResult
+
+    }
+
+    def "Test validate fraudulent user custom rules phone validation add to black list false"() {
+
+        given: "a expected user with invalid phone and a custom rule"
+        User expectedUser = buildUser()
+        expectedUser.phone = "111-1-111111"
+        CustomRule<User> customRule = {user -> user.phone ==~ /(\d{3})-(\d{3})-(\d{4})/}
+
+        when: "validate fraud user with custom rules"
+        boolean  actualResult = checkFraudUserService.validateFraudulentUserCustomRule(expectedUser.id, customRule, false)
+
+        then: "validation should not pass and expected calls"
+        1 * mockUserServiceClient.getUserById(expectedUser.id) >> expectedUser
+        !actualResult
+
+    }
 
     def buildUser (){
         new User(

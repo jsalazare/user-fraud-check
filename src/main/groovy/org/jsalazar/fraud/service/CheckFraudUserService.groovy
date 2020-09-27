@@ -1,6 +1,7 @@
 package org.jsalazar.fraud.service
 
 import org.jsalazar.fraud.model.User
+import org.jsalazar.fraud.rules.CustomRule
 
 interface CheckFraudUserService {
 
@@ -16,4 +17,6 @@ interface CheckFraudUserService {
     boolean validateUserPaymentMethods (Long userId)
 
     boolean validateReportsFraudulentUser(Long userId)
+
+    boolean validateFraudulentUserCustomRule (Long userId, CustomRule<User> customRules, boolean markInBlackList)
 }
