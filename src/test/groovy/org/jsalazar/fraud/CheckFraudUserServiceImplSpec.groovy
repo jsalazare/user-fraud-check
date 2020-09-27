@@ -4,6 +4,7 @@ import org.jsalazar.fraud.client.BankValidationService
 import org.jsalazar.fraud.client.LocationServiceClient
 import org.jsalazar.fraud.client.UserServiceClient
 import org.jsalazar.fraud.configuration.CheckFraudUserServiceConfiguration
+import org.jsalazar.fraud.exception.UserNotFoundException
 import org.jsalazar.fraud.model.Address
 import org.jsalazar.fraud.model.PaymentMethod
 import org.jsalazar.fraud.model.ReportType
@@ -38,6 +39,98 @@ class CheckFraudUserServiceImplSpec extends Specification{
                 checkFraudUserServiceConfiguration: checkFraudUserServiceConfiguration)
     }
 
+    def "Test getting user by id"() {
+
+        given: "a expected user"
+        User expectedUser = buildUser()
+
+        when: "call to checkFraudUserService.getUserById"
+        User actualUser = checkFraudUserService.getUserById(1)
+
+        then: "validate user return expected values and mockUserServiceClient.getUserById should be called once"
+        1 * mockUserServiceClient.getUserById(1) >> expectedUser
+
+        actualUser.id == expectedUser.id
+        actualUser.phone == expectedUser.phone
+        actualUser.email == expectedUser.email
+        actualUser.isFraud == expectedUser.isFraud
+        actualUser.userReports[0].id == expectedUser.userReports[0].id
+        actualUser.userReports[0].userId == expectedUser.userReports[0].userId
+        actualUser.userReports[0].reportType == expectedUser.userReports[0].reportType
+        actualUser.userReports[0].reportDescription == expectedUser.userReports[0].reportDescription
+        actualUser.address.street == expectedUser.address.street
+        actualUser.address.city == expectedUser.address.city
+        actualUser.address.state == expectedUser.address.state
+        actualUser.address.country == expectedUser.address.country
+        actualUser.paymentMethods[0].cardNumber == expectedUser.paymentMethods[0].cardNumber
+        actualUser.paymentMethods[0].expiration == expectedUser.paymentMethods[0].expiration
+    }
+
+
+    def "Test getting user by id return null user"() {
+        when: "getting user by id"
+        checkFraudUserService.getUserById(1)
+
+        then: "the service throws UserNotFoundException"
+        1 * mockUserServiceClient.getUserById(1)
+        thrown UserNotFoundException
+
+    }
+
+    def "Test setting fraudulent user"() {
+
+        given: "a expected user"
+        User expectedUser = buildUser()
+
+        when: "set fraudulent user as false"
+        checkFraudUserService.setFraudulentUser(1, false)
+
+        then: "expected calls should be trigger and user should set isFraud value to false"
+        1 * mockUserServiceClient.getUserById(1) >> expectedUser
+        1 * mockUserServiceClient.saveUser(expectedUser)
+        !expectedUser.isFraud
+
+    }
+
+
+    def "Test is fraudulent user"() {
+        given: "a expected user"
+        User expectedUser = buildUser()
+
+        when: "call to checkFraudUserService.isFraudulentUser"
+        boolean actualResult = checkFraudUserService.isFraudulentUser(expectedUser.id)
+
+        then: "expected calls should be trigger and should return the same isFraud value"
+        1 * mockUserServiceClient.getUserById(1) >> expectedUser
+
+        expectedUser.isFraud == actualResult
+
+    }
+
+    def "Test validate user location"() {
+        given: "a expected user and ip"
+        User expectedUser = buildUser()
+        String ip = "123-123-123-123"
+
+        when: "validates user location"
+        checkFraudUserService.validateUserLocation(1, ip)
+
+        then: "expected calls should be trigger"
+        1 * mockUserServiceClient.getUserById(1) >> expectedUser
+        1 * mockLocationServiceClient.validateAddressMatchesIP(ip, expectedUser.address)
+    }
+
+    def "Test validate user payment methods"() {
+        given: "a expected user"
+        User expectedUser = buildUser()
+
+        when: "validates payment methods"
+        checkFraudUserService.validateUserPaymentMethods(1)
+
+        then: "expected calls should be trigger"
+        1 * mockUserServiceClient.getUserById(1) >> expectedUser
+        1 * mockBankValidationService.validatePaymentMethod(expectedUser.paymentMethods)
+    }
 
 
     def "Test validate reports fraudulent user true"() {
