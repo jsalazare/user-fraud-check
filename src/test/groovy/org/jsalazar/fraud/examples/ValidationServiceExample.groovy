@@ -10,7 +10,7 @@ class ValidationServiceExample {
         ValidationService validationService = new ValidationServiceImpl()
 
 
-        List<PaymentMethod> paymentMethods = [new PaymentMethod(cardNumber: "1234123412341234", expiration: "01/01", PaymentType.CREDIT)]
+        List<PaymentMethod> paymentMethods = [new PaymentMethod(cardNumber: "1234123412341234", expiration: "01/01", paymentType: PaymentType.CREDIT)]
         //validates payment methods
         validationService.validatePaymentMethods(paymentMethods)
 

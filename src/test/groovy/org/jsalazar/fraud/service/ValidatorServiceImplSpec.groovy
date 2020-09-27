@@ -7,7 +7,6 @@ import org.jsalazar.fraud.model.PaymentMethod
 import org.jsalazar.fraud.model.PaymentType
 import org.jsalazar.fraud.model.User
 import org.jsalazar.fraud.rules.CustomRule
-import org.jsalazar.fraud.service.ValidationServiceImpl
 import spock.lang.Shared
 import spock.lang.Specification
 
