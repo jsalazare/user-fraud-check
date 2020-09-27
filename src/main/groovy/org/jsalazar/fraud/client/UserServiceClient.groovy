@@ -11,4 +11,6 @@ interface UserServiceClient {
     User getUserById(Long userId)
 
     List<UserReport> getUserReportByType(Long userId, ReportType type)
+
+    UserReport saveReport(UserReport report)
 }

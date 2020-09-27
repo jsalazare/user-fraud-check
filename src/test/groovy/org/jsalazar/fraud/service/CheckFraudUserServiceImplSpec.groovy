@@ -1,4 +1,4 @@
-package org.jsalazar.fraud
+package org.jsalazar.fraud.service
 
 import org.jsalazar.fraud.client.BankValidationService
 import org.jsalazar.fraud.client.LocationServiceClient
@@ -11,7 +11,6 @@ import org.jsalazar.fraud.model.ReportType
 import org.jsalazar.fraud.model.User
 import org.jsalazar.fraud.model.UserReport
 import org.jsalazar.fraud.rules.CustomRule
-import org.jsalazar.fraud.service.CheckFraudUserServiceImpl
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -67,6 +66,18 @@ class CheckFraudUserServiceImplSpec extends Specification{
         actualUser.paymentMethods[0].expiration == expectedUser.paymentMethods[0].expiration
     }
 
+    def "Test save user"() {
+        given: "a user"
+        User expectedUser = buildUser()
+
+        when: "saving the user"
+        checkFraudUserService.saveUser(expectedUser)
+
+        then: "user service save method should be called once"
+        1 * mockUserServiceClient.saveUser(expectedUser)
+
+    }
+
 
     def "Test getting user by id return null user"() {
         when: "getting user by id"
@@ -108,17 +119,17 @@ class CheckFraudUserServiceImplSpec extends Specification{
 
     }
 
-    def "Test validate user location"() {
+    def "Test validate user location matches ip"() {
         given: "a expected user and ip"
         User expectedUser = buildUser()
         String ip = "123-123-123-123"
 
         when: "validates user location"
-        checkFraudUserService.validateUserLocation(1, ip)
+        checkFraudUserService.validateUserAddressMatchesId(1, ip)
 
         then: "expected calls should be trigger"
         1 * mockUserServiceClient.getUserById(1) >> expectedUser
-        1 * mockLocationServiceClient.validateAddressMatchesIP(ip, expectedUser.address)
+        1 * mockLocationServiceClient.validateAddressMatchesIP(expectedUser.address, ip)
     }
 
     def "Test validate user payment methods"() {

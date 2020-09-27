@@ -6,6 +6,7 @@ import org.jsalazar.fraud.client.UserServiceClient
 import org.jsalazar.fraud.configuration.CheckFraudUserServiceConfiguration
 import org.jsalazar.fraud.exception.UserNotFoundException
 import org.jsalazar.fraud.model.User
+import org.jsalazar.fraud.model.UserReport
 import org.jsalazar.fraud.rules.CustomRule
 
 class CheckFraudUserServiceImpl implements CheckFraudUserService{
@@ -17,6 +18,12 @@ class CheckFraudUserServiceImpl implements CheckFraudUserService{
     BankValidationService bankValidationService
 
     CheckFraudUserServiceConfiguration checkFraudUserServiceConfiguration
+
+
+    @Override
+    User saveUser(User user) {
+        userServiceClient.saveUser(user)
+    }
 
     @Override
     User getUserById(Long userId) {
@@ -37,21 +44,32 @@ class CheckFraudUserServiceImpl implements CheckFraudUserService{
 
 
     @Override
+    UserReport addUserReport(UserReport report) {
+        getUserById(report.userId) //validates if user exists
+        userServiceClient.saveReport(report)
+    }
+
+
+    @Override
     boolean isFraudulentUser(Long userId) {
         getUserById(userId).isFraud
     }
 
 
     @Override
-    boolean validateUserLocation (Long userId, String ip){
+    boolean validateUserAddressMatchesId (Long userId, String ip){
         User user = getUserById(userId)
-        locationServiceClient.validateAddressMatchesIP(ip, user.address)
+        locationServiceClient.validateAddressMatchesIP(user.address, ip)
     }
 
     @Override
     boolean validateUserPaymentMethods (Long userId){
         User user = getUserById(userId)
-        bankValidationService.validatePaymentMethod(user.paymentMethods)
+        if (user.paymentMethods){
+            return bankValidationService.validatePaymentMethod(user.paymentMethods)
+        }
+
+        return false
     }
 
     @Override

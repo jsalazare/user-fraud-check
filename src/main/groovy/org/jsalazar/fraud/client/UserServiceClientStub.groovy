@@ -30,4 +30,9 @@ class UserServiceClientStub implements UserServiceClient{
     List<UserReport> getUserReportByType(Long userId, ReportType type) {
         return [new UserReport(id: 1, userId: 1, reportType: ReportType.FRAUD, reportDescription: "User seems fake")]
     }
+
+    @Override
+    UserReport saveReport(UserReport report) {
+        new UserReport(id: 1, userId: 1, reportType: ReportType.FRAUD, reportDescription: "User seems fake")
+    }
 }

@@ -1,4 +1,4 @@
-package org.jsalazar.fraud
+package org.jsalazar.fraud.service
 
 import org.jsalazar.fraud.client.BankValidationService
 import org.jsalazar.fraud.client.LocationServiceClient
