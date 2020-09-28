@@ -2,12 +2,12 @@ package org.jsalazar.fraud.examples
 
 import org.jsalazar.fraud.model.*
 import org.jsalazar.fraud.rules.CustomRule
+import org.jsalazar.fraud.service.FraudValidationServiceFactory
 import org.jsalazar.fraud.service.ValidationService
-import org.jsalazar.fraud.service.ValidationServiceImpl
 
 class ValidationServiceExample {
     static void main(String[] args) {
-        ValidationService validationService = new ValidationServiceImpl()
+        ValidationService validationService = FraudValidationServiceFactory.getDefaultValidatorService()
 
 
         List<PaymentMethod> paymentMethods = [new PaymentMethod(cardNumber: "1234123412341234", expiration: "01/01", paymentType: PaymentType.CREDIT)]

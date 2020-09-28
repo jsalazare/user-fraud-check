@@ -92,12 +92,11 @@ class CheckFraudUserServiceImpl implements CheckFraudUserService{
     }
 
     /**
-     * validates if user is fraudulent based on custom rules
+     * validates if user is fraudulent based on a custom rule
      * @param userId user id of user to validate
-     * @param customRules custom rules if one is true
-     * @param landlineEnabled Landline status for the destination. If false, all landline call activity will be
-     *                        rejected or disabled.
-     * @return true if at least one rule is true
+     * @param customRules custom rule
+     * @param markInBlackList whether should be marked in black list or not
+     * @return true if custom rule returns true otherwise false
      */
     @Override
     boolean validateFraudulentUserCustomRule (Long userId, CustomRule<User> customRules, boolean markInBlackList) {

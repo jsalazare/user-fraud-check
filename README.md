@@ -28,8 +28,8 @@ package org.jsalazar.fraud.examples
 
 import org.jsalazar.fraud.model.*
 import org.jsalazar.fraud.rules.CustomRule
+import org.jsalazar.fraud.service.FraudValidationServiceFactory
 import org.jsalazar.fraud.service.ValidationService
-import org.jsalazar.fraud.service.ValidationServiceImpl
 
 class ValidationServiceExample {
     static void main(String[] args) {
